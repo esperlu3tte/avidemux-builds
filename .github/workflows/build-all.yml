@@ -39,9 +39,9 @@ jobs:
       - name: Checkout Build Repo
         uses: actions/checkout@v4
 
-      - name: Install macOS Build System Dependencies
-        run: |
-          brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
+      # - name: Install macOS Build System Dependencies
+      #   run: |
+      #     brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
 
       - name: Clone Official Avidemux Repository
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
@@ -62,7 +62,7 @@ jobs:
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
           # Create a 5GB case-sensitive virtual RAM disk volume
-          hdiutil create -size 5g -fs "Case-Sensitive APFS" -volname AvidemuxBuild -attach /tmp/AvidemuxBuild.dmg
+          hdiutil create -size 5g -fs "case-sensitive apfs" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
           # Copy source to build volume
           cp -R avidemux2 /Volumes/AvidemuxBuild/
           cd /Volumes/AvidemuxBuild/avidemux2
