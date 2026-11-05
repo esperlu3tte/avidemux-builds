@@ -86,7 +86,14 @@ jobs:
         run: |
           cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
-          bash ${{ matrix.script }}
+          if ! bash ${{ matrix.script }}; then
+            echo "===================================================="
+            echo " !!! NINJA COMPILATION CRASH LOG DETECTED !!!"
+            echo "===================================================="
+            # Forces the console to print out the hidden nested log file structure
+            cat /tmp/logbuildCore
+            exit 1
+          fi
 
       - name: Upload macOS Distribution Package to Release
         uses: softprops/action-gh-release@v2
