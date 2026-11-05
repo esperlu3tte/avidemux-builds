@@ -70,7 +70,7 @@ jobs:
           sed -i '' 's|export MYQT=/usr/local/Cellar/qt/6.7.3|export MYQT="${MYQT:-/usr/local/Cellar/qt/6.7.3}"|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|export PATH=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib:$PATH|# Neutralized PATH patch|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|export LIBRARY_PATH="$LIBRARY_PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"|# Neutralized LIBRARY_PATH patch|g' bootStrapMacOS_Sonoma.sh
-          sed -i '' 's|-DCMAKE_OSX_ARCHITECTURES="x86_64"|-DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES:-x86_64}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5|g' bootStrapMacOS_Sonoma.sh
+          sed -i '' 's|-DCMAKE_OSX_ARCHITECTURES="x86_64"|-DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES:-x86_64}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           # sed -i '' 's|-G "$BUILDER"|-G "$BUILDER" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           cat bootStrapMacOS_Sonoma.sh
 
