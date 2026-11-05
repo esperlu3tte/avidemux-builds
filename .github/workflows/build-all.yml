@@ -43,9 +43,13 @@ jobs:
       #   run: |
       #     brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
 
+      - name: Create a 5gb case-sensitive volume
+        run: hdiutil create -size 5g -fs "Case-sensitive APFS" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
+
       - name: Clone Official Avidemux Repository
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
         run: |
+          cd /Volumes/AvidemuxBuild/
           # Clone the repo to the targeted frozen build framework
           git clone --recursive --revision ${{ env.AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV }} ${{ env.AVIDEMUX_REPO }} avidemux2
           cd avidemux2
@@ -61,21 +65,14 @@ jobs:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
-          # Create a 5GB case-sensitive virtual disk volume
-          hdiutil create -size 5g -fs "Case-sensitive APFS" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
-          # Copy source to build volume
-          cp -R avidemux2 /Volumes/AvidemuxBuild/
           cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
           bash ${{ matrix.script }}
-          # Copy back the completed installer package to the main workspace
-          mkdir -p ${{ github.workspace }}/avidemux2/installer
-          cp installer/*.dmg ${{ github.workspace }}/avidemux2/installer/
 
       - name: Upload macOS Distribution Package to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: "avidemux2/installer/*.dmg"
+          files: "/Volumes/AvidemuxBuild/avidemux2/installer/*.dmg"
           tag_name: "test-build"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
