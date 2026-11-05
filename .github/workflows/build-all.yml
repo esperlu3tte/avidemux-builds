@@ -64,6 +64,8 @@ jobs:
           # MYQT: ${{ matrix.qt_path }}
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
+          CMAKE_POLICY_VERSION_MINIMUM: "3.0"
+          CMAKE_FLAGS: "-DCMAKE_POLICY_VERSION_MINIMUM=3.0"
         run: |
           cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
