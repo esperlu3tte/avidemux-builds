@@ -39,9 +39,9 @@ jobs:
       - name: Checkout Build Repo
         uses: actions/checkout@v4
 
-      # - name: Install macOS Build System Dependencies
-      #   run: |
-      #     brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
+      - name: Install macOS Build System Dependencies
+        run: |
+          brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
 
       - name: Create a 5gb case-sensitive volume
         run: hdiutil create -size 5g -fs "Case-sensitive APFS" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
@@ -55,11 +55,10 @@ jobs:
           cd avidemux2
           # Fetch tags
           git fetch --tags
+          # Purges all code directories before roll back to targeted version
+          rm -rf cmake/ avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
           # Roll back the application components to targeted version
           git checkout 2.8.1 -- cmake/ avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
-          # Purges all residual untracked files
-          git status
-          git clean -fdx
           git status
           git submodule update --init --recursive
 
