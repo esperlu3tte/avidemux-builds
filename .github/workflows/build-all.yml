@@ -178,5 +178,5 @@ jobs:
   #       with:
   #         files: "*.exe"
   #         tag_name: "test-build"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
