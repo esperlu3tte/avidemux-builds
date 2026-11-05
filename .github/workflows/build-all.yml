@@ -61,9 +61,16 @@ jobs:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
-          cd avidemux2
+          # Create a 5GB case-sensitive virtual RAM disk volume
+          hdiutil create -size 5g -fs "Case-Sensitive APFS" -volname AvidemuxBuild -attach /tmp/AvidemuxBuild.dmg
+          # Copy source to build volume
+          cp -R avidemux2 /Volumes/AvidemuxBuild/
+          cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
           bash ${{ matrix.script }}
+          # Copy back the completed installer package to the main workspace
+          mkdir -p ${{ github.workspace }}/avidemux2/installer
+          cp installer/*.dmg ${{ github.workspace }}/avidemux2/installer/
 
       - name: Upload macOS Distribution Package to Release
         uses: softprops/action-gh-release@v2
