@@ -49,6 +49,8 @@ jobs:
           # Clone the repo to the targeted frozen build framework
           git clone --recursive --revision ${{ env.AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV }} ${{ env.AVIDEMUX_REPO }} avidemux2
           cd avidemux2
+          # Fetch tags
+          git fetch --tags
           # Roll back the application components to targeted version
           git checkout 2.8.1 -- avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
           git submodule update --init --recursive
