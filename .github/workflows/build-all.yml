@@ -47,7 +47,7 @@ jobs:
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
         run: |
           # Clone the repo to the targeted frozen build framework
-          git clone --recursive --branch ${{ env.AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV }} ${{ env.AVIDEMUX_REPO }} avidemux2
+          git clone --recursive --revision ${{ env.AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV }} ${{ env.AVIDEMUX_REPO }} avidemux2
           cd avidemux2
           # Roll back the application components to targeted version
           git checkout 2.8.1 -- avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
