@@ -39,9 +39,9 @@ jobs:
       - name: Checkout Build Repo
         uses: actions/checkout@v4
 
-      # - name: Install macOS Build System Dependencies
-      #   run: |
-      #     brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
+      - name: Install macOS Build System Dependencies
+        run: |
+          brew install cmake pkg-config ninja nasm yasm qt xvid x264 x265 libvpx aom opus fdk-aac lame libass mp4v2 a52dec
 
       - name: Create a 5gb case-sensitive volume
         run: hdiutil create -size 5g -fs "Case-sensitive APFS" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
