@@ -11,7 +11,7 @@ on:
 env:
   AVIDEMUX_REPO: "https://github.com/mean00/avidemux2.git"
   # Frozen build scripts (november 2026)
-  AVIDEMUX_BUILD_SCRIPT_BASE_URL: "https://raw.githubusercontent.com/mean00/avidemux2/c7e6576d605de685fae0b126204e4258aa92026d"
+  # AVIDEMUX_BUILD_SCRIPT_BASE_URL: "https://raw.githubusercontent.com/mean00/avidemux2/c7e6576d605de685fae0b126204e4258aa92026d"
 
 jobs:
   # =================================================================
@@ -29,11 +29,11 @@ jobs:
             script: bootStrapMacOS_Monterey.arm64.sh
             deployment_target: ""
             cmake_arch: "arm64"
-          - arch: intel
-            qt_path: /usr/local/opt/qt
-            script: bootStrapMacOS_Sonoma.sh
-            deployment_target: "11.0" # Ensures binary runtime compatibility down to macOS Big Sur
-            cmake_arch: "x86_64" # Cross-compile into Intel x86_64 binaries
+          # - arch: intel
+          #   qt_path: /usr/local/opt/qt
+          #   script: bootStrapMacOS_Sonoma.sh
+          #   deployment_target: "11.0" # Ensures binary runtime compatibility down to macOS Big Sur
+          #   cmake_arch: "x86_64" # Cross-compile into Intel x86_64 binaries
     steps:
       - name: Checkout Build Repo
         uses: actions/checkout@v4
@@ -45,10 +45,6 @@ jobs:
       - name: Clone Official Avidemux Repository
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
         run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
-
-      - name: Fetch Frozen Build Script
-        run: |
-          curl -o avidemux2/${{ matrix.script }} ${{ env.AVIDEMUX_BUILD_SCRIPT_BASE_URL }}/${{ matrix.script }}
 
       - name: Compile and Package Application into DMG Bundle
         env:
@@ -71,116 +67,116 @@ jobs:
   # =================================================================
   # LINUX BUILD FACTORY (FACTORIZED X64 & ARM64 APPIMAGES)
   # =================================================================
-  build-linux:
-    name: Linux AppImage (${{ matrix.arch }})
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: x64
-            runner: ubuntu-latest # Standard Linux Intel/AMD 64-bit environment
-          - arch: arm64
-            runner: ubuntu-latest-arm64 # Native Linux ARM64 runner infrastructure
-    steps:
-      - name: Checkout Build Repo
-        uses: actions/checkout@v4
+  # build-linux:
+  #   name: Linux AppImage (${{ matrix.arch }})
+  #   runs-on: ${{ matrix.runner }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - arch: x64
+  #           runner: ubuntu-latest # Standard Linux Intel/AMD 64-bit environment
+  #         - arch: arm64
+  #           runner: ubuntu-latest-arm64 # Native Linux ARM64 runner infrastructure
+  #   steps:
+  #     - name: Checkout Build Repo
+  #       uses: actions/checkout@v4
 
-      - name: Install GNU/Linux Toolchain & UI Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake ninja-build pkg-config qt6-base-dev qt6-l10n-tools libgl1-mesa-dev fakeroot patchelf libfuse2
+  #     - name: Install GNU/Linux Toolchain & UI Dependencies
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -y build-essential cmake ninja-build pkg-config qt6-base-dev qt6-l10n-tools libgl1-mesa-dev fakeroot patchelf libfuse2
 
-      - name: Clone Official Avidemux Repository
-        # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
-        run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
+  #     - name: Clone Official Avidemux Repository
+  #       # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
+  #       run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
 
-      - name: Fetch Frozen Build Script
-        run: |
-          curl -o avidemux2/makeAppImageBookwormMinimal.sh ${{ env.AVIDEMUX_BUILD_SCRIPT_BASE_URL }}/makeAppImageBookwormMinimal.sh
+  #     - name: Fetch Frozen Build Script
+  #       run: |
+  #         curl -o avidemux2/makeAppImageBookwormMinimal.sh ${{ env.AVIDEMUX_BUILD_SCRIPT_BASE_URL }}/makeAppImageBookwormMinimal.sh
 
-      - name: Compile Code and Build Universal AppImage Package
-        run: |
-          cd avidemux2
-          # Explicitly executing via bash shields execution against environment POSIX shell overrides
-          bash makeAppImageBookwormMinimal.sh
+  #     - name: Compile Code and Build Universal AppImage Package
+  #       run: |
+  #         cd avidemux2
+  #         # Explicitly executing via bash shields execution against environment POSIX shell overrides
+  #         bash makeAppImageBookwormMinimal.sh
 
-      - name: Upload Linux AppImage Package to Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: "avidemux2/*.AppImage"
-          tag_name: "test-build"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Upload Linux AppImage Package to Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: "avidemux2/*.AppImage"
+  #         tag_name: "test-build"
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # =================================================================
-  # WINDOWS BUILD FACTORY (NATIVE MATRIX FOR X64 & ARM64)
-  # =================================================================
-  build-windows:
-    name: Windows Native (${{ matrix.arch }})
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: x64
-            sys: mingw64 # Native Windows Intel/AMD 64-bit architecture
-            env: x86_64
-          - arch: arm64
-            sys: clangarm64 # Native Windows ARM64 architecture (Qualcomm Snapdragon / Apple Silicon virtualization)
-            env: aarch64
-    steps:
-      - name: Checkout Build Repo
-        uses: actions/checkout@v4
+  # # =================================================================
+  # # WINDOWS BUILD FACTORY (NATIVE MATRIX FOR X64 & ARM64)
+  # # =================================================================
+  # build-windows:
+  #   name: Windows Native (${{ matrix.arch }})
+  #   runs-on: windows-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - arch: x64
+  #           sys: mingw64 # Native Windows Intel/AMD 64-bit architecture
+  #           env: x86_64
+  #         - arch: arm64
+  #           sys: clangarm64 # Native Windows ARM64 architecture (Qualcomm Snapdragon / Apple Silicon virtualization)
+  #           env: aarch64
+  #   steps:
+  #     - name: Checkout Build Repo
+  #       uses: actions/checkout@v4
 
-      - name: Initialize Isolated MSYS2 GNU Sandbox on Windows Machine
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: ${{ matrix.sys }}
-          update: true
-          install: >-
-            git
-            make
-            cmake
-            ninja
-            nasm
-            yasm
-            mingw-w64-${{ matrix.env }}-toolchain
-            mingw-w64-${{ matrix.env }}-qt6-base
-            mingw-w64-${{ matrix.env }}-ffmpeg
+  #     - name: Initialize Isolated MSYS2 GNU Sandbox on Windows Machine
+  #       uses: msys2/setup-msys2@v2
+  #       with:
+  #         msystem: ${{ matrix.sys }}
+  #         update: true
+  #         install: >-
+  #           git
+  #           make
+  #           cmake
+  #           ninja
+  #           nasm
+  #           yasm
+  #           mingw-w64-${{ matrix.env }}-toolchain
+  #           mingw-w64-${{ matrix.env }}-qt6-base
+  #           mingw-w64-${{ matrix.env }}-ffmpeg
 
-      - name: Clone Official Avidemux Repository within MSYS2 Shell
-        shell: msys2 {0}
-        # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
-        run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
+  #     - name: Clone Official Avidemux Repository within MSYS2 Shell
+  #       shell: msys2 {0}
+  #       # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
+  #       run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
 
-      - name: Perform Native Windows Structural Code Compilation
-        shell: msys2 {0}
-        run: |
-          cd avidemux2
-          # Sets up isolated standard building structure to generate native windows files
-          mkdir build && cd build
-          cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../installer_output ..
-          ninja && ninja install
+  #     - name: Perform Native Windows Structural Code Compilation
+  #       shell: msys2 {0}
+  #       run: |
+  #         cd avidemux2
+  #         # Sets up isolated standard building structure to generate native windows files
+  #         mkdir build && cd build
+  #         cmake -G Ninja -DCMAKE_INSTALL_PREFIX=../../installer_output ..
+  #         ninja && ninja install
 
-      - name: Run Windows Deploy Tool for Qt Dependencies
-        shell: msys2 {0}
-        run: |
-          # windeployqt copies all mandatory Qt DLLs and plugins into the output directory
-          windeployqt ../../installer_output/avidemux.exe
+  #     - name: Run Windows Deploy Tool for Qt Dependencies
+  #       shell: msys2 {0}
+  #       run: |
+  #         # windeployqt copies all mandatory Qt DLLs and plugins into the output directory
+  #         windeployqt ../../installer_output/avidemux.exe
 
-      - name: Compile Binaries into a Single Self-Extracting EXE
-        shell: msys2 {0}
-        run: |
-          # Uses Windows built-in 7-Zip capabilities to create an auto-extracting executable
-          cd installer_output
-          # 7z a -sfx7z.sfx ../avidemux-${{ github.ref_name }}-windows-${{ matrix.arch }}.exe *
-          7z a -sfx7z.sfx ../avidemux-2.8.1-windows-${{ matrix.arch }}.exe *
+  #     - name: Compile Binaries into a Single Self-Extracting EXE
+  #       shell: msys2 {0}
+  #       run: |
+  #         # Uses Windows built-in 7-Zip capabilities to create an auto-extracting executable
+  #         cd installer_output
+  #         # 7z a -sfx7z.sfx ../avidemux-${{ github.ref_name }}-windows-${{ matrix.arch }}.exe *
+  #         7z a -sfx7z.sfx ../avidemux-2.8.1-windows-${{ matrix.arch }}.exe *
 
-      - name: Upload Native Windows Distribution Binaries to Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: "*.exe"
-          tag_name: "test-build"
+  #     - name: Upload Native Windows Distribution Binaries to Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: "*.exe"
+  #         tag_name: "test-build"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
