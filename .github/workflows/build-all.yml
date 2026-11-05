@@ -73,6 +73,9 @@ jobs:
           sed -i '' 's|-DCMAKE_OSX_ARCHITECTURES="x86_64"|-DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES:-x86_64}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           # sed -i '' 's|-G "$BUILDER"|-G "$BUILDER" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|BUILDER="Ninja"|BUILDER="Unix Makefiles"|g' bootStrapMacOS_Sonoma.sh
+          # Replace calls to ninja by make and make install
+          sed -i '' 's|ninja >/tmp/log|make -j$(sysctl -n hw.ncpu) >/tmp/log|g' bootStrapMacOS_Sonoma.sh
+          sed -i '' 's|DESTDIR="$FAKEROOT_DIR" ninja install|DESTDIR="$FAKEROOT_DIR" make install|g' bootStrapMacOS_Sonoma.sh
           cat bootStrapMacOS_Sonoma.sh
 
       - name: Compile and Package Application into DMG Bundle
@@ -89,7 +92,7 @@ jobs:
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
           if ! bash ${{ matrix.script }}; then
             echo "===================================================="
-            echo " !!! NINJA COMPILATION CRASH LOG DETECTED !!!"
+            echo " !!! COMPILATION CRASH LOG DETECTED !!!"
             echo "===================================================="
             # Forces the console to print out the hidden nested log file structure
             cat /tmp/logbuildCore
