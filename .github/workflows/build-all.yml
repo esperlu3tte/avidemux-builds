@@ -10,6 +10,8 @@ on:
 
 env:
   AVIDEMUX_REPO: "https://github.com/mean00/avidemux2.git"
+  # Frozen build scripts (november 2026)
+  AVIDEMUX_BUILD_SCRIPT_BASE_URL: "https://raw.githubusercontent.com/mean00/avidemux2/c7e6576d605de685fae0b126204e4258aa92026d"
 
 jobs:
   # =================================================================
@@ -17,21 +19,21 @@ jobs:
   # =================================================================
   build-macos:
     name: macOS (${{ matrix.arch }})
-    runs-on: ${{ matrix.runner }}
+    runs-on: macos-14 # Native Apple Silicon M1/M2 infrastructure
     strategy:
       fail-fast: false
       matrix:
         include:
           - arch: arm64
-            runner: macos-14 # Native Apple Silicon M1/M2 infrastructure
             qt_path: /opt/homebrew/opt/qt
             script: bootStrapMacOS_Monterey.arm64.sh
             deployment_target: ""
+            cmake_arch: "arm64"
           - arch: intel
-            runner: macos-13 # Last native Intel x86_64 host runner
             qt_path: /usr/local/opt/qt
             script: bootStrapMacOS_Sonoma.sh
             deployment_target: "11.0" # Ensures binary runtime compatibility down to macOS Big Sur
+            cmake_arch: "x86_64" # Cross-compile into Intel x86_64 binaries
     steps:
       - name: Checkout Build Repo
         uses: actions/checkout@v4
@@ -44,10 +46,15 @@ jobs:
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
         run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
 
+      - name: Fetch Frozen Build Script
+        run: |
+          curl -o avidemux2/${{ matrix.script }} ${{ env.AVIDEMUX_BUILD_SCRIPT_BASE_URL }}/${{ matrix.script }}
+
       - name: Compile and Package Application into DMG Bundle
         env:
           MYQT: ${{ matrix.qt_path }}
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
+          CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
           cd avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
@@ -87,6 +94,10 @@ jobs:
       - name: Clone Official Avidemux Repository
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
         run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
+
+      - name: Fetch Frozen Build Script
+        run: |
+          curl -o avidemux2/makeAppImageBookwormMinimal.sh ${{ env.AVIDEMUX_BUILD_SCRIPT_BASE_URL }}/makeAppImageBookwormMinimal.sh
 
       - name: Compile Code and Build Universal AppImage Package
         run: |
