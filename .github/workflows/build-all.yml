@@ -61,6 +61,8 @@ jobs:
           # Roll back the application components to targeted version
           git checkout 2.8.1 -- cmake/ avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
           git submodule update --init --recursive
+          # Duplicate the cmake infrastructure mapping to fix historical layout lookup failures
+          cp -R cmake avidemux_core/
 
       - name: Fetch and Patch Modern Unified Build Script
         run: |
