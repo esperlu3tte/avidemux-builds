@@ -61,8 +61,8 @@ jobs:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
-          # Create a 5GB case-sensitive virtual RAM disk volume
-          hdiutil create -size 5g -fs "case-sensitive apfs" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
+          # Create a 5GB case-sensitive virtual disk volume
+          hdiutil create -size 5g -fs "Case-sensitive APFS" -volname AvidemuxBuild /tmp/AvidemuxBuild.dmg -attach
           # Copy source to build volume
           cp -R avidemux2 /Volumes/AvidemuxBuild/
           cd /Volumes/AvidemuxBuild/avidemux2
