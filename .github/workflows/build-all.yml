@@ -57,6 +57,8 @@ jobs:
           git fetch --tags
           # Roll back the application components to targeted version
           git checkout 2.8.1 -- cmake/ avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
+          # Purges all residual untracked files
+          git clean -fdx
           git submodule update --init --recursive
 
       - name: Compile and Package Application into DMG Bundle
