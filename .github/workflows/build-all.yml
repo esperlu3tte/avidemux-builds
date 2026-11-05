@@ -20,7 +20,7 @@ jobs:
   # =================================================================
   build-macos:
     name: macOS (${{ matrix.arch }})
-    runs-on: macos-14 # Native Apple Silicon M1/M2 infrastructure
+    runs-on: macos-latest # Native Apple Silicon M1/M2 infrastructure
     strategy:
       fail-fast: false
       matrix:
