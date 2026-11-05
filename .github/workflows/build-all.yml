@@ -11,6 +11,7 @@ on:
 env:
   AVIDEMUX_REPO: "https://github.com/mean00/avidemux2.git"
   # Frozen build scripts (november 2026)
+  AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV: "c7e6576d605de685fae0b126204e4258aa92026d"
   # AVIDEMUX_BUILD_SCRIPT_BASE_URL: "https://raw.githubusercontent.com/mean00/avidemux2/c7e6576d605de685fae0b126204e4258aa92026d"
 
 jobs:
@@ -44,7 +45,13 @@ jobs:
 
       - name: Clone Official Avidemux Repository
         # run: git clone --recursive --branch ${{ github.ref_name }} ${{ env.AVIDEMUX_REPO }} avidemux2
-        run: git clone --recursive --branch 2.8.1 ${{ env.AVIDEMUX_REPO }} avidemux2
+        run: |
+          # Clone the repo to the targeted frozen build framework
+          git clone --recursive --branch ${{ env.AVIDEMUX_BUILD_SCRIPTS_FROZEN_REV }} ${{ env.AVIDEMUX_REPO }} avidemux2
+          cd avidemux2
+          # Roll back the application components to targeted version
+          git checkout 2.8.1 -- avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
+          git submodule update --init --recursive
 
       - name: Compile and Package Application into DMG Bundle
         env:
