@@ -80,6 +80,8 @@ jobs:
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
           CMAKE_POLICY_VERSION_MINIMUM: "3.5"
+          CMAKE_POLICY_DEFAULT_CMP0025: "OLD"
+          CMAKE_POLICY_DEFAULT_CMP0042: "OLD"
           CMAKE_FLAGS: "-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD"
         run: |
           cd /Volumes/AvidemuxBuild/avidemux2
