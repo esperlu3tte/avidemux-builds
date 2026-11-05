@@ -82,7 +82,7 @@ jobs:
         run: |
           cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
-          bash ${{ matrix.script }} "${{ env.CMAKE_FLAGS }}"
+          bash ${{ matrix.script }} -- "${{ env.CMAKE_FLAGS }}"
 
       - name: Upload macOS Distribution Package to Release
         uses: softprops/action-gh-release@v2
