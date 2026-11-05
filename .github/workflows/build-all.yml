@@ -56,7 +56,7 @@ jobs:
           # Fetch tags
           git fetch --tags
           # Roll back the application components to targeted version
-          git checkout 2.8.1 -- avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
+          git checkout 2.8.1 -- cmake/ avidemux/ avidemux_core/ avidemux_plugins/ myOwnPlugins/
           git submodule update --init --recursive
 
       - name: Compile and Package Application into DMG Bundle
