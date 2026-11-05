@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   #   tags:
-  #     - '[0-9]+.[0-9]+.[0-9]+*' # Triggers strictly for clean semantic version numbers (e.g., 2.8.1)
+  #     - "[0-9]+.[0-9]+.[0-9]+*" # Triggers strictly for clean semantic version numbers (e.g., 2.8.1)
     branches:
       - dev-ci
 
@@ -56,7 +56,7 @@ jobs:
       - name: Upload macOS Distribution Package to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: avidemux2/installer/*.dmg
+          files: "avidemux2/installer/*.dmg"
           tag_name: "test-build"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,7 +97,7 @@ jobs:
       - name: Upload Linux AppImage Package to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: avidemux2/*.AppImage
+          files: "avidemux2/*.AppImage"
           tag_name: "test-build"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -169,7 +169,7 @@ jobs:
       - name: Upload Native Windows Distribution Binaries to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: *.exe
+          files: "*.exe"
           tag_name: "test-build"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
