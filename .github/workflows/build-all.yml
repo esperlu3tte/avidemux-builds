@@ -48,7 +48,7 @@ jobs:
 
       - name: Compile and Package Application into DMG Bundle
         env:
-          MYQT: ${{ matrix.qt_path }}
+          # MYQT: ${{ matrix.qt_path }}
           MACOSX_DEPLOYMENT_TARGET: ${{ matrix.deployment_target }}
           CMAKE_OSX_ARCHITECTURES: ${{ matrix.cmake_arch }}
         run: |
