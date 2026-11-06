@@ -71,7 +71,7 @@ jobs:
           sed -i '' 's|export PATH=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib:$PATH|# Neutralized PATH patch|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|export LIBRARY_PATH="$LIBRARY_PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"|# Neutralized LIBRARY_PATH patch|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|export SDKROOT=|# Neutralized SDKROOT |g' bootStrapMacOS_Sonoma.sh
-          sed -i '' 's|-DCMAKE_OSX_ARCHITECTURES="x86_64"|-DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES:-x86_64}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD -DCMAKE_CXX_FLAGS="-Wno-c++11-narrowing -std=c++11"|g' bootStrapMacOS_Sonoma.sh
+          sed -i '' 's|-DCMAKE_OSX_ARCHITECTURES="x86_64"|-DCMAKE_OSX_ARCHITECTURES="${CMAKE_OSX_ARCHITECTURES:-x86_64}"|g' bootStrapMacOS_Sonoma.sh
           # sed -i '' 's|-G "$BUILDER"|-G "$BUILDER" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|BUILDER="Ninja"|BUILDER="Unix Makefiles"|g' bootStrapMacOS_Sonoma.sh
           # Replace calls to ninja by make and make install
@@ -88,10 +88,9 @@ jobs:
           CMAKE_POLICY_DEFAULT_CMP0025: "OLD"
           CMAKE_POLICY_DEFAULT_CMP0042: "OLD"
           CMAKE_CXX_FLAGS: "-Wno-c++11-narrowing -std=c++11"
-          CMAKE_FLAGS: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD -DCMAKE_CXX_FLAGS="-Wno-c++11-narrowing -std=c++11"'
-          # CPATH: ""
-          # C_INCLUDE_PATH: ""
-          # CPLUS_INCLUDE_PATH: ""
+          CMAKE_ARGS: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD -DCMAKE_CXX_FLAGS="-Wno-c++11-narrowing -std=c++11"'
+          CFLAGS: "-Wno-c++11-narrowing"
+          CXXFLAGS: "-Wno-c++11-narrowing -std=c++11"
         run: |
           cd /Volumes/AvidemuxBuild/avidemux2
           # Explicitly executing via bash shields execution against environment POSIX shell overrides
