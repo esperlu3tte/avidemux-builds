@@ -74,7 +74,7 @@ jobs:
           # sed -i '' 's|-G "$BUILDER"|-G "$BUILDER" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|BUILDER="Ninja"|BUILDER="Unix Makefiles"|g' bootStrapMacOS_Sonoma.sh
           # Replace calls to ninja by make and make install
-          sed -i '' 's|ninja >/tmp/log${BASE}|make -j$(sysctl -n hw.ncpu)|g' bootStrapMacOS_Sonoma.sh
+          sed -i '' 's|ninja >/tmp/log${BASE}|make|g' bootStrapMacOS_Sonoma.sh
           sed -i '' 's|DESTDIR="$FAKEROOT_DIR" ninja install|DESTDIR="$FAKEROOT_DIR" make install|g' bootStrapMacOS_Sonoma.sh
           cat bootStrapMacOS_Sonoma.sh
 
