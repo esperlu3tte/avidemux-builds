@@ -88,7 +88,7 @@ jobs:
           CMAKE_POLICY_DEFAULT_CMP0025: "OLD"
           CMAKE_POLICY_DEFAULT_CMP0042: "OLD"
           GETTEXT_FOUND: FALSE
-          CMAKE_ARGS: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD -DGETTEXT_FOUND=FALSE -DCMAKE_CXX_FLAGS="-Wno-c++11-narrowing -std=c++11 -isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1"'
+          CMAKE_ARGS: '-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_POLICY_DEFAULT_CMP0025=OLD -DCMAKE_POLICY_DEFAULT_CMP0042=OLD -DGETTEXT_FOUND=FALSE -DCMAKE_CXX_FLAGS="-Wno-c++11-narrowing -std=c++11 -isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1" -DCMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES=/Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1'
           CMAKE_CXX_FLAGS: "-Wno-c++11-narrowing -std=c++11 -isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1"
           CFLAGS: "-Wno-c++11-narrowing"
           CXXFLAGS: "-Wno-c++11-narrowing -std=c++11 -isystem /Applications/Xcode_26.6.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1"
